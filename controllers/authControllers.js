@@ -33,7 +33,7 @@ const signup = async (req, res, next) => {
       console.log("after creating instance");
       const data= await user.save();
       console.log("after save");
-      return res.status(201).send({ "message": "User created successfully", data: {user: data}, status: "Success"})
+      return res.status(201).send({ "message": "User created successfully", data: {user: data}, status: "success"})
     }
     return res.status(400).send({ "message": "Please provide all required information", "status": "Error" });
 } catch (err) {
@@ -61,18 +61,19 @@ const login = async (req, res, next) => {
     const { email, password } = req.body;
     if(email&&password){
         const user= await  User.findOne({ email }).select('email password');
+        console.log(user);
         if(user){
             const isValidUser= bcrypt.compareSync(password, user.password);
             if(isValidUser){
-              const token= jwt.sign(user, JWT_SECRET);
-              return res.status(200).send({ token, status: "Success" })
+              const token= jwt.sign({email, password}, JWT_SECRET);
+              return res.status(200).send({ token, status: "success" })
               
             }
             return res.status(401).send({ "message": "Invalid email or password", "status": "Error", "error": "Invalid Credentials" });
         }
         return res.status(401).send({ "message": "Invalid email or password", "status": "Error", "error": "Invalid Credentials" });
     }
-    return res.status(400).send({ "message": "Please provide all required information", "status": "Error" })
+    return res.status(400).send({ "message": "Please provide email and password", "status": "Error" })
   } catch (err) {
     res.status(500).json({
       status: 'error',
