@@ -33,7 +33,7 @@ const signup = async (req, res, next) => {
       console.log("after creating instance");
       const data= await user.save();
       console.log("after save");
-      return res.status(201).send({ "message": "User created successfully", data: {user: data}})
+      return res.status(201).send({ "message": "User created successfully", data: {user: data}, status: "Success"})
     }
     return res.status(400).send({ "message": "Please provide all required information", "status": "Error" });
 } catch (err) {
