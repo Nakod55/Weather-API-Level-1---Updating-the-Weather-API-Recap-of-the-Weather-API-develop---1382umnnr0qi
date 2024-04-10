@@ -27,10 +27,21 @@ const signup = async (req, res, next) => {
     // Save the user to the database
     // Handle success and send a success response with user data
     // Handle errors and send an error response
-  } catch (err) {
+    const { username, email, password } = req.body;
+    if(username&&email&&password){
+      const user= new User({username, email,  password});
+      console.log("after creating instance");
+      const data= await user.save();
+      console.log("after save");
+      return res.status(201).send({ "message": "User created successfully", data: {user: data}})
+    }
+    return res.status(400).send({ "message": "Please provide all required information", "status": "Error" });
+} catch (err) {
+    console.log(err);
     res.status(500).json({
       status: 'error',
       message: 'Internal Server Error',
+
       error: err.message,
     });
   }

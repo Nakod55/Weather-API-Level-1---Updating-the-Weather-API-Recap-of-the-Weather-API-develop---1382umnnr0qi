@@ -1,4 +1,6 @@
 // Define the User Schema
+const mongoose= require("mongoose");
+const bcrypt= require("bcrypt");
 const userSchema = new mongoose.Schema(
   {
     // Define the 'username' field
@@ -15,6 +17,22 @@ const userSchema = new mongoose.Schema(
     // 1) The data type of this field is a string
     // 2) This field is required
     // 3) Password should be at least 8 characters long
+    username:{
+      type: String,
+      required: true,
+      unique: true
+    },
+    email:{
+      type: String,
+      required: true,
+      unique: true
+    },
+    password:{
+      type: String,
+      required: true,
+      minlength: 8
+        
+    },
   },
   { timestamps: true } // Automatically generate 'createdAt' and 'updatedAt' timestamps
 );
